@@ -11,24 +11,18 @@ Vue.component('variable', {
   },
 })
 
-var timeFormat = (function () {
-  function num (val, zero = false) {
-    val = Math.floor(val)
-
-    if (zero) {
-      val = val < 10 ? val : val
-    }
-
-    return val
+let timeFormat = (function () {
+  function num (val) {
+    return  Math.floor(val)
   }
 
   return function (time) {
-    let hours = time / 60
-      , minutes = time % 60
-      , label = ''
+    let hours = time / 60,
+      minutes = time % 60,
+      label = ''
 
     function declOfNum (number, titles) {
-      cases = [2, 0, 1, 1, 1, 2]
+      let cases = [2, 0, 1, 1, 1, 2]
       return titles[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]]
     }
 
@@ -37,14 +31,14 @@ var timeFormat = (function () {
     }
 
     if (0 < num(minutes)) {
-      label += ' ' + num(minutes, true) + ' ' + declOfNum(num(minutes, true), ['минута', 'минуты', 'минут'])
+      label += ' ' + num(minutes) + ' ' + declOfNum(num(minutes), ['минута', 'минуты', 'минут'])
     }
 
     return label
   }
 })()
 
-var app = new Vue({
+let app = new Vue({
   el: '#app',
   data: {
     title: 'Калькулятор времени на задачу',
@@ -124,11 +118,9 @@ var app = new Vue({
 
       this.items.forEach(function (item) {
         total_time += Math.round(dev_time * item.value / 100)
-        console.log(total_time)
       })
 
       total_time += parseInt(dev_time)
-      console.log('b": ' + total_time)
 
       this.estimated_time = timeFormat(total_time)
     }
