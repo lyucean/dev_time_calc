@@ -1,90 +1,107 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-	<!-- Required meta tags -->
+  <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-	<!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+        crossorigin="anonymous">
 
-	<!-- Bootstrap Vue JS CSS -->
-<link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
-
-	<!-- Custom CSS -->
+  <!-- Custom CSS -->
   <link rel="stylesheet" href="main.css">
 
-	<!-- Vue JS -->
-  <script src="https://unpkg.com/vue"></script>
-	<!-- Add this after vue.js -->
-	<script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
-	<script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+  <!-- Vue JS -->
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 
   <title>Калькулятор времени на задачу</title>
 </head>
 <body>
 
 <div class="container h-100" id="app">
-	<div class="row h-100 justify-content-center align-items-center">
-		<div class="col-12">
-			<div class="card">
-				<div class="card-body text-muted">{{ title }}</div>
-				<div class="card-body">
+  <div class="row h-100 justify-content-center align-items-center">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body text-center lead">{{ title }}
+          <!-- Кнопка скрытие/отображение расчётов -->
+          <button class="btn btn-sm btn-light" v-on:click="show_calc = !show_calc">
+            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-eye-slash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z"/>
+              <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299l.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z"/>
+              <path d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709z"/>
+              <path fill-rule="evenodd" d="M13.646 14.354l-12-12 .708-.708 12 12-.708.708z"/>
+            </svg>
+          </button>
+        </div>
+        <div class="card-body">
 
-					<div class="row">
-						<div class="col-5">
-							<label>Разработка кода:</label>
-						</div>
-						<div class="col-5">
-							<input v-model="dev_time_minute" min="15" max="1440" step="15" type="range" class="form-control">
-						</div>
-						<div class="col-2">
-							<label>{{ dev_time_label }}</label>
-						</div>
-					</div>
+          <div class="row">
+            <div class="col-4">
+              <label>Написание кода:</label>
+            </div>
+            <div class="col-1" v-if="show_calc">
+              100%
+            </div>
+            <div class="col-4" v-if="show_calc">
+              <input v-model="dev_time_minute" min="15" max="1440" step="15" type="range"
+                     class="form-control">
+            </div>
+            <div class="col-3">
+              <label>{{ dev_time_label }}</label>
+            </div>
+          </div>
 
-					<!-- Vue JS component -->
-					<variable v-for="(item, index) in items"
-										v-bind:key="index"
-										v-bind:item="item">
-					</variable>
+          <!-- Vue JS component -->
+          <variable v-for="(item, index) in items"
+                    v-bind:key="index"
+                    v-bind:item="item">
+          </variable>
 
-				</div>
-				<div class="card-body lead">
-					<div class="row">
-						<div class="col-6 text-right">
-							Вам потребуется:
-						</div>
-						<div class="col-5 text-left">
-							<strong>{{ estimated_time }}</strong>
-						</div>
-					</div>
+          <div class="row" v-if="!show_calc">
+            <div class="col-4">
+              <label class="text-left">Итого:</label>
+            </div>
+            <div class="col-3">
+              {{ estimated_time }}
+            </div>
+          </div>
 
-				</div>
-			</div>
-		</div>
-	</div>
+        </div>
+        <div class="card-body lead" v-if="show_calc">
+          <div class="row">
+            <div class="col-12 text-center">
+              Задача ориентировочно займёт: <strong>{{ estimated_time }}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Vue JS component-template -->
 <script type="text/x-template" id="variable-template">
-	<div class="row">
-		<div class="col-5">
-			<label>{{ item.title }}:</label>
-		</div>
-		<div class="col-5">
-			<input v-model="item.value" min="0" max="100" step="5" type="range" class="form-control">
-		</div>
-		<div class="col-2" v-if="0 < item.value">
-			<label>+{{ item.value }}%</label>
-		</div>
-	</div>
+  <div class="row"  v-if="0 < item.value || item.show">
+    <div class="col-4">
+      <label>{{ item.title }}:</label>
+    </div>
+    <div class="col-1" v-if="item.show">
+      + {{ item.value }}%
+    </div>
+    <div class="col-4" v-if="item.show">
+      <input v-model="item.value" min="0" max="100" step="5" type="range" class="form-control">
+    </div>
+    <div class="col-3" v-if="0 < item.value">
+      <label>+{{ item.time }}</label>
+    </div>
+  </div>
 </script>
 
 <!-- Custom JS -->
-<script src="main.js?asw2"></script>
-
-
+<script src="main.js"></script>
 
 </body>
 </html>
